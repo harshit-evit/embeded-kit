@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="STM32 Embedded Development Kit - Interactive Manual with detailed component specifications">
+    <title>STM32 Kit Interactive Manual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f23, #1a1a3e, #2d1b69);
+            color: #e0e6ed;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff, #ff6b6b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .close-btn {
+            background: rgba(255, 107, 107, 0.2);
+            border: 2px solid #ff6b6b;
+            color: #ff6b6b;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 50px;
+        }
+
+        /* Product Image Section */
+        .product-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            margin: 2rem;
+            position: relative;
+            transition: all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+            margin-bottom: 20px; /* gap between image and cards */
+        }
+
+        .product-section.detailed {
+            flex: 0.6;
+        }
+
+        .product-image-container {
+            position: relative;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .product-image {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        /* Highlight Rectangle */
+        .highlight-rect {
+            position: absolute;
+            border: 3px solid #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 8px;
+            opacity: 0;
+            transition: all 0.5s ease;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        .highlight-rect.active {
+            opacity: 1;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.8); }
+        }
+
+        /* Sections List */
+            .sections-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            padding: 0 1rem 1.5rem;
+            margin: 1rem;
+            box-sizing: border-box;
+        }
+
+
+        .sections-list.hidden {
+            opacity: 0;
+            transform: translateX(50px);
+            pointer-events: none;
+        }
+
+        .section-category {
+            margin-bottom: 2.5rem;
+        }
+
+        .category-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff, #ff6b6b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-item {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(255, 107, 107, 0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .section-item:hover::before {
+            left: 100%;
+        }
+
+        .section-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 212, 255, 0.2);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+
+        .section-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #e0e6ed;
+        }
+
+        .section-item p {
+            color: #b8c5d1;
+            font-size: 0.95rem;
+        }
+
+        /* Detail View */
+        .detail-view {
+            flex: 1;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(15, 15, 35, 0.9), rgba(45, 27, 105, 0.7));
+            border-radius: 25px;
+            margin: 2rem;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: none;
+            overflow-y: auto;
+        }
+
+        .detail-view.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .detail-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff, #ff6b6b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        .detail-content {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .spec-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 100%;
+        }
+
+        .spec-title {
+            font-size: 1.3rem;
+            color: #00d4ff;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .spec-list {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .spec-list li {
+            padding: 0.3rem 0;
+            color: #b8c5d1;
+        }
+
+        .spec-list li strong {
+            color: #e0e6ed;
+        }
+
+        .component-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 10px;
+            margin: 1rem 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #e0e6ed;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+
+    .section-card {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(255, 107, 107, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    width: 280px; /* fixed width on larger screens */
+    padding:10px;
+    margin-top:10px
+}
+
+    .section-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 212, 255, 0.2);
+        border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    .card-image {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card-body {
+        padding: 1rem;
+        flex: 1;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #e0e6ed;
+    }
+
+    .card-description {
+        font-size: 0.9rem;
+        color: #b8c5d1;
+    }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-container {
+                flex-direction: column;
+                padding-top: 50px;
+            }
+
+            .product-section {
+                flex: none;
+                height: 50vh;
+            }
+
+            .product-section.detailed {
+                height: 40vh;
+            }
+
+            .sections-list, .detail-view {
+                flex: none;
+            }
+           
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding-top: 50px;
+            }
+
+            header {
+                padding: 0.5rem 1rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .product-section {
+                padding: 1rem;
+            }
+
+            .sections-list, .detail-view {
+                padding: 1rem;
+                margin: 1rem;
+            }
+
+            .category-title {
+                font-size: 1.5rem;
+            }
+
+            .detail-title {
+                font-size: 2rem;
+            }
+            .sections-card {
+             min-width: 100%;  
+            }
+             
+        }
+
+    </style>
+</head>
+<body x-data="kitManual()">
+    <header>
+        <div class="logo">STM32 Kit Manual</div>
+        <button class="close-btn" x-show="selectedSection" @click="closeDetail()" x-transition>
+            ← Back to Sections
+        </button>
+    </header>
+
+    <div class="main-container">
+        <!-- Product Image Section -->
+        <div class="product-section" :class="{ detailed: selectedSection }">
+            <div class="product-image-container">
+                <img src="esp3.jpg" 
+                     alt="STM32 Embedded Kit" 
+                     class="product-image" 
+                     id="mainImage">
+                
+                <!-- Highlight Rectangle -->
+                
+                 <template x-if="selectedSection && selectedSection.highlights && selectedSection.highlights.length">
+                    <template x-for="(hl, index) in selectedSection.highlights" :key="index">
+                        <div class="highlight-rect active" 
+                             :style="getHighlightStyle(hl)">
+                        </div>
+                    </template>
+                </template>
+            </div>
+        </div>
+
+        <!-- Sections List -->
+        <div class="sections-list" x-show="!selectedSection">
+            <template x-for="category in categories" :key="category.name">
+                <div class="section-category">
+                    <h2 class="category-title" x-text="category.name"></h2>
+                    <template x-for="section in category.sections" :key="section.id">
+                        <div class="section-card" @click="selectSection(section)">
+                            <h3 x-text="section.title"></h3>
+                            <!-- <p x-text="section.description"></p> -->
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+
+
+        <!-- Detail View -->
+        <div class="detail-view" :class="{ active: selectedSection }" x-show="selectedSection">
+            <template x-if="selectedSection">
+                <div>
+                    <h1 class="detail-title" x-text="selectedSection.title"></h1>
+                    <div class="detail-content">
+                        <!-- Component Image -->
+                        <div class="spec-card" x-show="selectedSection.image">
+                            <img :src="selectedSection.image" 
+                                 :alt="selectedSection.title" 
+                                 class="component-image"
+                                 x-show="selectedSection.image">
+                        </div>
+
+                        <!-- Specifications -->
+                        <div class="spec-card">
+                            <h3 class="spec-title">Specifications</h3>
+                            <ul class="spec-list">
+                                <template x-for="spec in selectedSection.specifications" :key="spec">
+                                    <li x-html="spec"></li>
+                                </template>
+                            </ul>
+                        </div>
+
+                        <!-- Connections -->
+                        <div class="spec-card" x-show="selectedSection.connections">
+                            <h3 class="spec-title">Connections</h3>
+                            <ul class="spec-list">
+                                <template x-for="conn in selectedSection.connections" :key="conn">
+                                    <li x-html="conn"></li>
+                                </template>
+                            </ul>
+                        </div>
+
+                        <!-- Code Example -->
+                        <div class="spec-card" x-show="selectedSection.code">
+                            <h3 class="spec-title">Code Example</h3>
+                            <div class="code-block">
+                                <pre x-text="selectedSection.code"></pre>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="spec-card">
+                            <h3 class="spec-title">Description</h3>
+                            <p x-text="selectedSection.fullDescription"></p>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        function kitManual() {
+            return {
+                selectedSection: null,
+                imageWidth: 600,
+                imageHeight: 400,
+                
+                categories: [
+                    {
+                        name: "Standard Part",
+                        sections: [
+                            {
+                                id: 'i2c',
+                                title: '1.1 Serial I2C Section',
+                                description: 'EEPROM and MPU6050 sensor with I2C communication',
+                                image: 'esp.html',
+                                highlights:[ { x: 15, y: 10, width: 25, height: 15 },],
+                                specifications: [
+                                    '<strong>EEPROM:</strong> Non-volatile data storage',
+                                    '<strong>MPU6050:</strong> 6-axis motion tracking sensor',
+                                    '<strong>Interface:</strong> I2C Protocol',
+                                    '<strong>Voltage:</strong> 3.3V'
+                                ],
+                                connections: [
+                                    '<strong>SDA</strong> → B7',
+                                    '<strong>SCL</strong> → B6'
+                                ],
+                                code: `// I2C Initialization\n#include "stm32f1xx_hal.h"\n\nI2C_HandleTypeDef hi2c1;\n\nvoid I2C_Init(void) {\n    hi2c1.Instance = I2C1;\n    hi2c1.Init.ClockSpeed = 100000;\n    hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;\n    HAL_I2C_Init(&hi2c1);\n}`,
+                                fullDescription: 'The I2C section includes an EEPROM for non-volatile storage and an MPU6050 6-axis motion sensor. This combination provides both data persistence and motion tracking capabilities for advanced embedded applications.'
+                            },
+                            {
+                                id: 'can',
+                                title: '1.2 CAN Bus Interface',
+                                description: 'SN65HVD230 transceiver for industrial communication',
+                                image: 'https://via.placeholder.com/300x200/ff6b6b/ffffff?text=CAN+Bus',
+                                highlights:[ { x: 45, y: 12, width: 20, height: 18 },],
+                                specifications: [
+                                    '<strong>Transceiver:</strong> SN65HVD230',
+                                    '<strong>Data Rate:</strong> Up to 1 Mbps',
+                                    '<strong>Standard:</strong> ISO 11898-2',
+                                    '<strong>Voltage:</strong> 3.3V compatible with 5V logic'
+                                ],
+                                connections: [
+                                    '<strong>CTX</strong> → B9',
+                                    '<strong>CRX</strong> → B8'
+                                ],
+                                code: `// CAN Configuration\nCAN_HandleTypeDef hcan;\n\nvoid CAN_Init(void) {\n    hcan.Instance = CAN1;\n    hcan.Init.Prescaler = 18;\n    hcan.Init.Mode = CAN_MODE_NORMAL;\n    hcan.Init.SyncJumpWidth = CAN_SJW_1TQ;\n    HAL_CAN_Init(&hcan);\n}`,
+                                fullDescription: 'High-speed CAN bus interface using SN65HVD230 transceiver for automotive and industrial communication protocols. Supports differential signaling with robust noise immunity.'
+                            },
+                            {
+                                id: 'uart',
+                                title: '1.3 Serial UART RS232',
+                                description: 'DB9 connector with MAX232 for RS-232 communication',
+                                image: 'https://via.placeholder.com/300x200/ffeb3b/000000?text=UART+RS232',
+                                highlights:[ { x: 70, y: 25, width: 25, height: 20 },],
+                                specifications: [
+                                    '<strong>Connector:</strong> DB9 Female',
+                                    '<strong>IC:</strong> MAX232 Level Converter',
+                                    '<strong>Protocol:</strong> RS-232',
+                                    '<strong>Baud Rate:</strong> Configurable up to 115200'
+                                ],
+                                connections: [
+                                    '<strong>RX</strong> → A10',
+                                    '<strong>TX</strong> → A9'
+                                ],
+                                code: `// UART Configuration\nUART_HandleTypeDef huart1;\n\nvoid UART_Init(void) {\n    huart1.Instance = USART1;\n    huart1.Init.BaudRate = 9600;\n    huart1.Init.WordLength = UART_WORDLENGTH_8B;\n    huart1.Init.StopBits = UART_STOPBITS_1;\n    HAL_UART_Init(&huart1);\n}`,
+                                fullDescription: 'Professional RS-232 serial communication interface with MAX232 level converter and standard DB9 connector for PC and industrial device connectivity.'
+                            },
+                            {
+                                id: 'analog',
+                                title: '1.4 Analog Input',
+                                description: '10k Potentiometer for variable analog input',
+                                image: 'https://via.placeholder.com/300x200/9c27b0/ffffff?text=Analog+Input',
+                                highlights:[ { x: 25, y: 45, width: 15, height: 15 },],
+                                specifications: [
+                                    '<strong>Component:</strong> 10kΩ Potentiometer',
+                                    '<strong>Range:</strong> 0V to 3.3V',
+                                    '<strong>Resolution:</strong> 12-bit ADC',
+                                    '<strong>Accuracy:</strong> ±1 LSB'
+                                ],
+                                connections: [
+                                    '<strong>POT</strong> → A0'
+                                ],
+                                code: `// ADC Configuration\nADC_HandleTypeDef hadc1;\n\nvoid ADC_Init(void) {\n    hadc1.Instance = ADC1;\n    hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;\n    hadc1.Init.ContinuousConvMode = DISABLE;\n    HAL_ADC_Init(&hadc1);\n}`,
+                                fullDescription: 'Precision analog input using 10kΩ potentiometer connected to 12-bit ADC for variable voltage measurements and control applications.'
+                            },
+                            {
+                                id: 'bluepill',
+                                title: '1.6 Blue Pill MCU',
+                                description: 'STM32F103C8T6 32-bit ARM Cortex-M3 microcontroller',
+                                image: 'https://via.placeholder.com/300x200/2196f3/ffffff?text=STM32+Blue+Pill',
+                                highlights:[ { x: 30, y: 25, width: 40, height: 30 },],
+                                specifications: [
+                                    '<strong>MCU:</strong> STM32F103C8T6',
+                                    '<strong>Core:</strong> ARM Cortex-M3 72MHz',
+                                    '<strong>Flash:</strong> 64KB',
+                                    '<strong>RAM:</strong> 20KB',
+                                    '<strong>GPIO:</strong> 48 pins total'
+                                ],
+                                connections: [
+                                    '<strong>Operating Voltage:</strong> 3.3V',
+                                    '<strong>Input Tolerance:</strong> 5V on I/O pins'
+                                ],
+                                code: `// System Clock Configuration\nvoid SystemClock_Config(void) {\n    RCC_OscInitTypeDef RCC_OscInitStruct = {0};\n    RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};\n    \n    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;\n    RCC_OscInitStruct.HSEState = RCC_HSE_ON;\n    HAL_RCC_OscConfig(&RCC_OscInitStruct);\n}`,
+                                fullDescription: 'High-performance 32-bit ARM Cortex-M3 microcontroller with rich peripheral set including multiple UARTs, SPI, I2C, CAN, and USB interfaces.'
+                            }
+                        ]
+                    },
+                    {
+                        name: "BMS Section",
+                        sections: [
+                            {
+                                id: 'oled',
+                                title: '2.2 OLED Display',
+                                description: '128x64 OLED display with I2C interface',
+                                image: 'https://via.placeholder.com/300x200/4caf50/ffffff?text=OLED+Display',
+                                highlights:[ { x: 10, y: 60, width: 30, height: 20 },],
+                                specifications: [
+                                    '<strong>Resolution:</strong> 128x64 pixels',
+                                    '<strong>Display Type:</strong> OLED (Organic LED)',
+                                    '<strong>Interface:</strong> I2C',
+                                    '<strong>Operating Voltage:</strong> 3.3V - 5V'
+                                ],
+                                connections: [
+                                    '<strong>SDA</strong> → B11',
+                                    '<strong>SCL</strong> → B10'
+                                ],
+                                code: `// OLED Display Functions\n#include "ssd1306.h"\n\nvoid OLED_Init(void) {\n    ssd1306_Init();\n    ssd1306_Fill(Black);\n    ssd1306_SetCursor(2, 0);\n    ssd1306_WriteString("STM32 BMS", Font_11x18, White);\n    ssd1306_UpdateScreen();\n}`,
+                                fullDescription: 'High-contrast OLED display perfect for real-time battery monitoring data visualization, status indicators, and user interface elements in the BMS system.'
+                            },
+                            {
+                                id: 'bluetooth',
+                                title: '2.10 Bluetooth Module',
+                                description: 'HC-05 Bluetooth 2.0 module for wireless communication',
+                                image: 'https://via.placeholder.com/300x200/03a9f4/ffffff?text=Bluetooth+HC-05',
+                                highlights:[ { x: 50, y: 55, width: 25, height: 18 },],
+                                specifications: [
+                                    '<strong>Module:</strong> HC-05',
+                                    '<strong>Bluetooth Version:</strong> 2.0 + EDR',
+                                    '<strong>Range:</strong> Up to 10 meters',
+                                    '<strong>Default Baud Rate:</strong> 9600 (configurable)'
+                                ],
+                                connections: [
+                                    '<strong>RX</strong> → PA3',
+                                    '<strong>TX</strong> → PA2'
+                                ],
+                                code: `// Bluetooth Communication\nvoid Bluetooth_SendData(char* data) {\n    HAL_UART_Transmit(&huart2, (uint8_t*)data, strlen(data), 100);\n}\n\nvoid Bluetooth_ReceiveData(char* buffer) {\n    HAL_UART_Receive(&huart2, (uint8_t*)buffer, 64, 1000);\n}`,
+                                fullDescription: 'Wireless Bluetooth communication module enabling remote monitoring and control of the BMS system via smartphone or computer applications.'
+                            },
+                            {
+                                id: 'bmp280',
+                                title: '2.7 BMP280 Sensor',
+                                description: 'Digital barometric pressure and temperature sensor',
+                                image: 'https://via.placeholder.com/300x200/ff9800/ffffff?text=BMP280+Sensor',
+                                highlights:[ { x: 75, y: 40, width: 20, height: 15 },],
+                                specifications: [
+                                    '<strong>Sensor Type:</strong> Barometric Pressure & Temperature',
+                                    '<strong>Pressure Range:</strong> 300-1100 hPa',
+                                    '<strong>Temperature Range:</strong> -40°C to 85°C',
+                                    '<strong>Accuracy:</strong> ±1 hPa (pressure), ±1°C (temperature)'
+                                ],
+                                connections: [
+                                    '<strong>SCK</strong> → PB3',
+                                    '<strong>MISO</strong> → PB4',
+                                    '<strong>MOSI</strong> → PB5',
+                                    '<strong>CS</strong> → PA15'
+                                ],
+                                code: `// BMP280 Reading Functions\nfloat BMP280_ReadTemperature(void) {\n    // SPI communication to read temperature\n    uint32_t raw_temp = BMP280_ReadRawTemperature();\n    return BMP280_CompensateTemperature(raw_temp);\n}\n\nfloat BMP280_ReadPressure(void) {\n    uint32_t raw_press = BMP280_ReadRawPressure();\n    return BMP280_CompensatePressure(raw_press);\n}`,
+                                fullDescription: 'Precision environmental sensor providing atmospheric pressure and temperature measurements for environmental monitoring and altitude calculation in battery management applications.'
+                            }
+                        ]
+                    },
+                    {
+                        name: "Power & Battery Unit",
+                        sections: [
+                            {
+                                id: 'battery',
+                                title: '5.1 Li-ion Battery',
+                                description: '3.7V 2000mAh Li-ion battery with safety monitoring',
+                                image: 'https://via.placeholder.com/300x200/4caf50/ffffff?text=Li-ion+Battery',
+                                highlights:[ { x: 20, y: 70, width: 35, height: 25 },],
+                                specifications: [
+                                    '<strong>Voltage:</strong> 3.7V nominal',
+                                    '<strong>Capacity:</strong> 2000mAh',
+                                    '<strong>Chemistry:</strong> Lithium-ion',
+                                    '<strong>Charging Voltage:</strong> 4.2V max',
+                                    '<strong>Discharge Cutoff:</strong> 3.0V'
+                                ],
+                                connections: [
+                                    '<strong>Positive Terminal:</strong> Connected to BMS',
+                                    '<strong>Negative Terminal:</strong> Connected to GND',
+                                    '<strong>Temperature Monitoring:</strong> NTC sensor'
+                                ],
+                                code: `// Battery Monitoring\nfloat Read_Battery_Voltage(void) {\n    uint16_t adc_value = HAL_ADC_GetValue(&hadc1);\n    float voltage = (adc_value * 3.3) / 4096.0;\n    return voltage * 2; // Voltage divider compensation\n}\n\nfloat Read_Battery_Temperature(void) {\n    uint16_t ntc_value = HAL_ADC_GetValue(&hadc2);\n    return NTC_ConvertToTemperature(ntc_value);\n}`,
+                                fullDescription: 'High-capacity lithium-ion battery with integrated safety monitoring including temperature sensing, voltage monitoring, and controlled charging/discharging through the BMS system.'
+                            },
+                            {
+                                id: 'loads',
+                                title: '5.2 Load Resistors',
+                                description: 'Three precision load resistors: 22Ω, 47Ω, 56Ω (2W each)',
+                                image: 'https://via.placeholder.com/300x200/e91e63/ffffff?text=Load+Resistors',
+                                highlights:[ { x: 60, y: 70, width: 30, height: 20 },],
+                                specifications: [
+                                    '<strong>Resistor 1:</strong> 22Ω, 2W (Power: 0.62W @ 3.7V)',
+                                    '<strong>Resistor 2:</strong> 47Ω, 2W (Power: 0.29W @ 3.7V)',
+                                    '<strong>Resistor 3:</strong> 56Ω, 2W (Power: 0.24W @ 3.7V)',
+                                    '<strong>Control:</strong> Individual slide switches',
+                                    '<strong>Safety Rating:</strong> 2W power dissipation'
+                                ],
+                                connections: [
+                                    '<strong>Load 1 (22Ω):</strong> Switch controlled',
+                                    '<strong>Load 2 (47Ω):</strong> Switch controlled',
+                                    '<strong>Load 3 (56Ω):</strong> Switch controlled',
+                                    '<strong>LED Indicators:</strong> Show active loads'
+                                ],
+                                code: `// Load Control Functions\nvoid Enable_Load_22_Ohm(void) {\n    HAL_GPIO_WritePin(LOAD1_GPIO_Port, LOAD1_Pin, GPIO_PIN_SET);\n    HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);\n}\n\nvoid Disable_Load_22_Ohm(void) {\n    HAL_GPIO_WritePin(LOAD1_GPIO_Port, LOAD1_Pin, GPIO_PIN_RESET);\n    HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);\n}\n\nfloat Calculate_Load_Current(float voltage, float resistance) {\n    return voltage / resistance;\n}`,
+                                fullDescription: 'Precision load resistors for battery discharge testing and performance analysis. Each resistor can be individually controlled via slide switches with LED indicators to show active loads.'
+                            },
+                            {
+                                id: 'charging',
+                                title: '4.1 Charge-Discharge Module',
+                                description: '6-pin charging module with DPDT relay control',
+                                image: 'https://via.placeholder.com/300x200/ff5722/ffffff?text=Charging+Module',
+                                highlights:[ { x: 40, y: 20, width: 25, height: 20 },],
+                                specifications: [
+                                    '<strong>Module Type:</strong> 6-pin Charge-Discharge',
+                                    '<strong>Input Pins:</strong> DC power input (2 pins)',
+                                    '<strong>Battery Pins:</strong> Li-ion connection (2 pins)',
+                                    '<strong>Load Pins:</strong> Output to loads (2 pins)',
+                                    '<strong>Protection:</strong> Overcharge, over-discharge, short-circuit'
+                                ],
+                                connections: [
+                                    '<strong>DPDT Relay Control:</strong> PA1',
+                                    '<strong>Charging Enable:</strong> Slide switch',
+                                    '<strong>Status LED:</strong> Charging indicator'
+                                ],
+                                code: `// Charging Control\nvoid Enable_Battery_Charging(void) {\n    HAL_GPIO_WritePin(RELAY_GPIO_Port, RELAY_Pin, GPIO_PIN_SET);\n    HAL_GPIO_WritePin(CHARGE_LED_Port, CHARGE_LED_Pin, GPIO_PIN_SET);\n}\n\nvoid Disable_Battery_Charging(void) {\n    HAL_GPIO_WritePin(RELAY_GPIO_Port, RELAY_Pin, GPIO_PIN_RESET);\n    HAL_GPIO_WritePin(CHARGE_LED_Port, CHARGE_LED_Pin, GPIO_PIN_RESET);\n}\n\nbool Check_Charging_Status(void) {\n    return HAL_GPIO_ReadPin(CHARGE_STATUS_Port, CHARGE_STATUS_Pin);\n}`,
+                                fullDescription: 'Advanced charging module with integrated protection circuits and relay-controlled switching for safe battery charging and discharging operations under BMS supervision.'
+                            },
+                            {
+                                id: 'power',
+                                title: '6.1-6.3 Power Unit',
+                                description: 'DC05 jack, 3A fuse protection, and power distribution',
+                                image: 'https://via.placeholder.com/300x200/795548/ffffff?text=Power+Unit',
+                                highlights:[ { x: 5, y: 35, width: 25, height: 25 },
+],                                specifications: [
+                                    '<strong>Input:</strong> DC05 Female Jack (5V, 2A)',
+                                    '<strong>Protection:</strong> 3A Glass Fuse with holder',
+                                    '<strong>Output Pins:</strong> 4x 5V, 4x 3.3V, 4x GND',
+                                    '<strong>Distribution:</strong> Power port with multiple outputs'
+                                ],
+                                connections: [
+                                    '<strong>Input Voltage:</strong> 5V DC ± 5%',
+                                    '<strong>Maximum Current:</strong> 2A continuous',
+                                    '<strong>Fuse Rating:</strong> 3A fast-blow',
+                                    '<strong>Output Regulation:</strong> Linear regulators'
+                                ],
+                                code: `// Power Management\nvoid System_Power_Init(void) {\n    // Enable power domains\n    __HAL_RCC_PWR_CLK_ENABLE();\n    \n    // Configure power management\n    HAL_PWR_EnableBkUpAccess();\n    \n    // Monitor supply voltage\n    ADC_Start_VoltageMonitoring();\n}\n\nfloat Monitor_Supply_Voltage(void) {\n    uint16_t adc_val = HAL_ADC_GetValue(&hadc_supply);\n    return (adc_val * 3.3 * 2) / 4096.0; // Voltage divider\n}\n\nvoid Emergency_Shutdown(void) {\n    HAL_GPIO_WritePin(POWER_EN_Port, POWER_EN_Pin, GPIO_PIN_RESET);\n}`,
+                                fullDescription: 'Comprehensive power management unit with overcurrent protection, voltage regulation, and distributed power supply for all system components with safety monitoring.'
+                            },
+                            {
+                                id: 'sensors',
+                                title: '3.1-3.2 Current & Voltage Sensors',
+                                description: 'Shunt-based current sensors and voltage divider circuits',
+                                image: 'https://via.placeholder.com/300x200/607d8b/ffffff?text=Sensors+Unit',
+                                highlights:[ { x: 75, y: 60, width: 20, height: 25 },],
+                                specifications: [
+                                    '<strong>Current Sensors:</strong> 3x Shunt-based (0.1Ω)',
+                                    '<strong>Voltage Sensors:</strong> 2x Voltage dividers (10kΩ)',
+                                    '<strong>Measurement Range:</strong> 0-3A current, 0-15V voltage',
+                                    '<strong>Accuracy:</strong> ±2% full scale'
+                                ],
+                                connections: [
+                                    '<strong>Current Sensor 1:</strong> PB0',
+                                    '<strong>Current Sensor 2:</strong> PA0', 
+                                    '<strong>Current Sensor 3:</strong> PA7',
+                                    '<strong>Voltage Divider 1:</strong> PA4',
+                                    '<strong>Voltage Divider 2:</strong> PA5'
+                                ],
+                                code: `// Sensor Reading Functions\nfloat Read_Shunt_Current(uint8_t sensor_id) {\n    uint16_t adc_value;\n    switch(sensor_id) {\n        case 1: adc_value = HAL_ADC_GetValue(&hadc_current1); break;\n        case 2: adc_value = HAL_ADC_GetValue(&hadc_current2); break;\n        case 3: adc_value = HAL_ADC_GetValue(&hadc_current3); break;\n        default: return 0.0;\n    }\n    \n    float voltage = (adc_value * 3.3) / 4096.0;\n    float current = voltage / 0.1; // 0.1Ω shunt resistance\n    return current;\n}\n\nfloat Read_Voltage_Divider(uint8_t sensor_id) {\n    uint16_t adc_value = (sensor_id == 1) ? \n        HAL_ADC_GetValue(&hadc_volt1) : \n        HAL_ADC_GetValue(&hadc_volt2);\n    \n    float voltage = (adc_value * 3.3) / 4096.0;\n    return voltage * 2.0; // Voltage divider ratio\n}`,
+                                fullDescription: 'Precision current and voltage sensing system using shunt resistors and voltage dividers for comprehensive battery and system monitoring with high accuracy measurements.'
+                            }
+                        ]
+                    }
+                ],
+
+                init() {
+                    // Set up image dimensions for responsive highlighting
+                    this.updateImageDimensions();
+                    window.addEventListener('resize', () => {
+                        this.updateImageDimensions();
+                    });
+                },
+
+                updateImageDimensions() {
+                    const img = document.getElementById('mainImage');
+                    if (img) {
+                        this.imageWidth = img.offsetWidth;
+                        this.imageHeight = img.offsetHeight;
+                    }
+                },
+
+                selectSection(section) {
+                    this.selectedSection = section;
+                    this.updateImageDimensions();
+                },
+
+                closeDetail() {
+                    this.selectedSection = null;
+                },
+
+                getHighlightStyle(highlight) {
+                    if (!highlight) return '';
+
+                    const x = (highlight.x / 100) * this.imageWidth;
+                    const y = (highlight.y / 100) * this.imageHeight;
+                    const width = (highlight.width / 100) * this.imageWidth;
+                    const height = (highlight.height / 100) * this.imageHeight;
+
+                    return `
+                        left: ${x}px;
+                        top: ${y}px;
+                        width: ${width}px;
+                        height: ${height}px;
+                    `;
+                }
+
+            }
+        }
+    </script>
+</body>
+</html>
