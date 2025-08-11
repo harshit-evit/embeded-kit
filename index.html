@@ -114,14 +114,14 @@
         .carousel-slide {
             position: absolute;
             top: 0;
-            left: auto;
-            right: auto;
+            left: 0;
+            right: 0;
             width: 100%;
             height: 100%;
             opacity: 0;
             transform: translateX(100%);
             transition: all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
-            background-size: cover;
+            background-size:contain;
             background-position: center;
             background-repeat: no-repeat;
         }
@@ -518,7 +518,7 @@
 </head>
 <body x-data="app()">
     <header :class="{ scrolled: scrolled }">
-        <div class="logo">Embedded Pro</div>
+        <div class="logo">ETM32</div>
         <nav>
             <ul>
                 <li><a href="#contact" @click="scrollToSection('contact')">Contact</a></li>
@@ -542,7 +542,7 @@
         <div class="hero-overlay"></div>
         
         <div class="hero-content">
-            <h1>STM32 Development Kit Pro</h1>
+            <h1>STM32 Development Kit</h1>
             <p class="hero-subtitle">Next-Generation Embedded Development Platform</p>
             <div class="cta">
                 <button class="primary" onclick="window.location.href='product.html'">Explore Features</button>
@@ -623,15 +623,19 @@
                 currentSlide: 0,
                 carouselImages: [
                     {
-                        url: 'esp.jpg',
+                        url: 'esp-img/1.png',
                         title: 'STM32 Development Board'
                     },
                     {
-                        url: 'esp2.jpg',
+                        url: 'esp-img/2.png',
                         title: 'Advanced Microcontroller'
                     },
                     {
-                        url: 'esp3.jpg',
+                        url: 'esp-img/3.png',
+                        title: 'Embedded Systems Lab'
+                    },
+                    {
+                        url: 'esp-img/4.png',
                         title: 'Embedded Systems Lab'
                     },
                    
