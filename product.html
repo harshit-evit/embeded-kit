@@ -153,6 +153,7 @@
         .category-title {
             font-size: 2rem;
             font-weight: 700;
+            text-align: center;
             background: linear-gradient(135deg, #00d4ff, #ff6b6b);
             -webkit-background-clip: text;
             background-clip: text;
@@ -311,6 +312,7 @@
     max-width: 500px;
     padding:10px;
     margin-top:10px;
+    text-align: center;
     
 }
 
@@ -957,118 +959,198 @@
                                     
                           ]
                     },
-//                     {
-//                         name: "Power & Battery Unit",
-//                         sections: [
-//                             {
-//                                 id: 'battery',
-//                                 title: '5.1 Li-ion Battery',
-//                                 description: '3.7V 2000mAh Li-ion battery with safety monitoring',
-//                                 images:[ 'https://via.placeholder.com/300x200/4caf50/ffffff?text=Li-ion+Battery',],
-//                                 highlights:[ { x: 20, y: 70, width: 35, height: 25 },],
-//                                 specifications: [
-//                                     '<strong>Voltage:</strong> 3.7V nominal',
-//                                     '<strong>Capacity:</strong> 2000mAh',
-//                                     '<strong>Chemistry:</strong> Lithium-ion',
-//                                     '<strong>Charging Voltage:</strong> 4.2V max',
-//                                     '<strong>Discharge Cutoff:</strong> 3.0V'
-//                                 ],
-//                                 connections: [
-//                                     '<strong>Positive Terminal:</strong> Connected to BMS',
-//                                     '<strong>Negative Terminal:</strong> Connected to GND',
-//                                     '<strong>Temperature Monitoring:</strong> NTC sensor'
-//                                 ],
-//                                 code: `// Battery Monitoring\nfloat Read_Battery_Voltage(void) {\n    uint16_t adc_value = HAL_ADC_GetValue(&hadc1);\n    float voltage = (adc_value * 3.3) / 4096.0;\n    return voltage * 2; // Voltage divider compensation\n}\n\nfloat Read_Battery_Temperature(void) {\n    uint16_t ntc_value = HAL_ADC_GetValue(&hadc2);\n    return NTC_ConvertToTemperature(ntc_value);\n}`,
-//                                 fullDescription: 'High-capacity lithium-ion battery with integrated safety monitoring including temperature sensing, voltage monitoring, and controlled charging/discharging through the BMS system.'
-//                             },
-//                             {
-//                                 id: 'loads',
-//                                 title: '5.2 Load Resistors',
-//                                 description: 'Three precision load resistors: 22Ω, 47Ω, 56Ω (2W each)',
-//                                 images:[ 'https://via.placeholder.com/300x200/e91e63/ffffff?text=Load+Resistors',],
-//                                 highlights:[ { x: 60, y: 70, width: 30, height: 20 },],
-//                                 specifications: [
-//                                     '<strong>Resistor 1:</strong> 22Ω, 2W (Power: 0.62W @ 3.7V)',
-//                                     '<strong>Resistor 2:</strong> 47Ω, 2W (Power: 0.29W @ 3.7V)',
-//                                     '<strong>Resistor 3:</strong> 56Ω, 2W (Power: 0.24W @ 3.7V)',
-//                                     '<strong>Control:</strong> Individual slide switches',
-//                                     '<strong>Safety Rating:</strong> 2W power dissipation'
-//                                 ],
-//                                 connections: [
-//                                     '<strong>Load 1 (22Ω):</strong> Switch controlled',
-//                                     '<strong>Load 2 (47Ω):</strong> Switch controlled',
-//                                     '<strong>Load 3 (56Ω):</strong> Switch controlled',
-//                                     '<strong>LED Indicators:</strong> Show active loads'
-//                                 ],
-//                                 code: `// Load Control Functions\nvoid Enable_Load_22_Ohm(void) {\n    HAL_GPIO_WritePin(LOAD1_GPIO_Port, LOAD1_Pin, GPIO_PIN_SET);\n    HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);\n}\n\nvoid Disable_Load_22_Ohm(void) {\n    HAL_GPIO_WritePin(LOAD1_GPIO_Port, LOAD1_Pin, GPIO_PIN_RESET);\n    HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);\n}\n\nfloat Calculate_Load_Current(float voltage, float resistance) {\n    return voltage / resistance;\n}`,
-//                                 fullDescription: 'Precision load resistors for battery discharge testing and performance analysis. Each resistor can be individually controlled via slide switches with LED indicators to show active loads.'
-//                             },
-//                             {
-//                                 id: 'charging',
-//                                 title: '4.1 Charge-Discharge Module',
-//                                 description: '6-pin charging module with DPDT relay control',
-//                                 images:[ 'https://via.placeholder.com/300x200/ff5722/ffffff?text=Charging+Module',],
-//                                 highlights:[ { x: 40, y: 20, width: 25, height: 20 },],
-//                                 specifications: [
-//                                     '<strong>Module Type:</strong> 6-pin Charge-Discharge',
-//                                     '<strong>Input Pins:</strong> DC power input (2 pins)',
-//                                     '<strong>Battery Pins:</strong> Li-ion connection (2 pins)',
-//                                     '<strong>Load Pins:</strong> Output to loads (2 pins)',
-//                                     '<strong>Protection:</strong> Overcharge, over-discharge, short-circuit'
-//                                 ],
-//                                 connections: [
-//                                     '<strong>DPDT Relay Control:</strong> PA1',
-//                                     '<strong>Charging Enable:</strong> Slide switch',
-//                                     '<strong>Status LED:</strong> Charging indicator'
-//                                 ],
-//                                 code: `// Charging Control\nvoid Enable_Battery_Charging(void) {\n    HAL_GPIO_WritePin(RELAY_GPIO_Port, RELAY_Pin, GPIO_PIN_SET);\n    HAL_GPIO_WritePin(CHARGE_LED_Port, CHARGE_LED_Pin, GPIO_PIN_SET);\n}\n\nvoid Disable_Battery_Charging(void) {\n    HAL_GPIO_WritePin(RELAY_GPIO_Port, RELAY_Pin, GPIO_PIN_RESET);\n    HAL_GPIO_WritePin(CHARGE_LED_Port, CHARGE_LED_Pin, GPIO_PIN_RESET);\n}\n\nbool Check_Charging_Status(void) {\n    return HAL_GPIO_ReadPin(CHARGE_STATUS_Port, CHARGE_STATUS_Pin);\n}`,
-//                                 fullDescription: 'Advanced charging module with integrated protection circuits and relay-controlled switching for safe battery charging and discharging operations under BMS supervision.'
-//                             },
-//                             {
-//                                 id: 'power',
-//                                 title: '6.1-6.3 Power Unit',
-//                                 description: 'DC05 jack, 3A fuse protection, and power distribution',
-//                                 images:[ 'https://via.placeholder.com/300x200/795548/ffffff?text=Power+Unit',],
-//                                 highlights:[ { x: 5, y: 35, width: 25, height: 25 },
-// ],                                specifications: [
-//                                     '<strong>Input:</strong> DC05 Female Jack (5V, 2A)',
-//                                     '<strong>Protection:</strong> 3A Glass Fuse with holder',
-//                                     '<strong>Output Pins:</strong> 4x 5V, 4x 3.3V, 4x GND',
-//                                     '<strong>Distribution:</strong> Power port with multiple outputs'
-//                                 ],
-//                                 connections: [
-//                                     '<strong>Input Voltage:</strong> 5V DC ± 5%',
-//                                     '<strong>Maximum Current:</strong> 2A continuous',
-//                                     '<strong>Fuse Rating:</strong> 3A fast-blow',
-//                                     '<strong>Output Regulation:</strong> Linear regulators'
-//                                 ],
-//                                 code: `// Power Management\nvoid System_Power_Init(void) {\n    // Enable power domains\n    __HAL_RCC_PWR_CLK_ENABLE();\n    \n    // Configure power management\n    HAL_PWR_EnableBkUpAccess();\n    \n    // Monitor supply voltage\n    ADC_Start_VoltageMonitoring();\n}\n\nfloat Monitor_Supply_Voltage(void) {\n    uint16_t adc_val = HAL_ADC_GetValue(&hadc_supply);\n    return (adc_val * 3.3 * 2) / 4096.0; // Voltage divider\n}\n\nvoid Emergency_Shutdown(void) {\n    HAL_GPIO_WritePin(POWER_EN_Port, POWER_EN_Pin, GPIO_PIN_RESET);\n}`,
-//                                 fullDescription: 'Comprehensive power management unit with overcurrent protection, voltage regulation, and distributed power supply for all system components with safety monitoring.'
-//                             },
-//                             {
-//                                 id: 'sensors',
-//                                 title: '3.1-3.2 Current & Voltage Sensors',
-//                                 description: 'Shunt-based current sensors and voltage divider circuits',
-//                                 images:[ 'https://via.placeholder.com/300x200/607d8b/ffffff?text=Sensors+Unit',],
-//                                 highlights:[ { x: 75, y: 60, width: 20, height: 25 },],
-//                                 specifications: [
-//                                     '<strong>Current Sensors:</strong> 3x Shunt-based (0.1Ω)',
-//                                     '<strong>Voltage Sensors:</strong> 2x Voltage dividers (10kΩ)',
-//                                     '<strong>Measurement Range:</strong> 0-3A current, 0-15V voltage',
-//                                     '<strong>Accuracy:</strong> ±2% full scale'
-//                                 ],
-//                                 connections: [
-//                                     '<strong>Current Sensor 1:</strong> PB0',
-//                                     '<strong>Current Sensor 2:</strong> PA0', 
-//                                     '<strong>Current Sensor 3:</strong> PA7',
-//                                     '<strong>Voltage Divider 1:</strong> PA4',
-//                                     '<strong>Voltage Divider 2:</strong> PA5'
-//                                 ],
-//                                 code: `// Sensor Reading Functions\nfloat Read_Shunt_Current(uint8_t sensor_id) {\n    uint16_t adc_value;\n    switch(sensor_id) {\n        case 1: adc_value = HAL_ADC_GetValue(&hadc_current1); break;\n        case 2: adc_value = HAL_ADC_GetValue(&hadc_current2); break;\n        case 3: adc_value = HAL_ADC_GetValue(&hadc_current3); break;\n        default: return 0.0;\n    }\n    \n    float voltage = (adc_value * 3.3) / 4096.0;\n    float current = voltage / 0.1; // 0.1Ω shunt resistance\n    return current;\n}\n\nfloat Read_Voltage_Divider(uint8_t sensor_id) {\n    uint16_t adc_value = (sensor_id == 1) ? \n        HAL_ADC_GetValue(&hadc_volt1) : \n        HAL_ADC_GetValue(&hadc_volt2);\n    \n    float voltage = (adc_value * 3.3) / 4096.0;\n    return voltage * 2.0; // Voltage divider ratio\n}`,
-//                                 fullDescription: 'Precision current and voltage sensing system using shunt resistors and voltage dividers for comprehensive battery and system monitoring with high accuracy measurements.'
-//                             }
-//                         ]
-//                     }
+                    {
+                        name: "Sensing & charging",
+                        sections: [
+                        {
+                                id: 'current_sensors',
+                                title: 'Three Current Sensors (Shunt)',
+                                description: 'High-accuracy current measurement using low-resistance shunt resistors',
+                                images: [],
+                                highlights: [
+                                ],
+                                specifications: [
+                                    '<strong>Operating Voltage:</strong> Depends on ADC circuit (3.3V or 5V)',
+                                    '<strong>Current Range:</strong> Milliamps to hundreds of amps (based on shunt value)',
+                                    '<strong>Shunt Resistance:</strong> 0.1Ω (minimizes power loss)',
+                                    '<strong>Output Signal:</strong> Analog voltage proportional to current'
+                                ],
+                                connections: [
+                                    '<strong>Sensor 1:</strong> PB0',
+                                    '<strong>Sensor 2:</strong> PA0',
+                                    '<strong>Sensor 3:</strong> PA7'
+                                ],
+                                fullDescription: `A shunt resistor placed in series with the load generates a small voltage drop proportional to current (Ohm’s Law: V = I × R). The ADC converts this voltage into a measurable signal, enabling precise current monitoring for power systems, BMS, and industrial control.`
+                            },
+                        {
+                            id: 'voltage_sensors',
+                            title: 'Two Voltage Sensors (Voltage Divider)',
+                            description: 'Voltage dividers for reducing input voltage to safe ADC levels',
+                            images: [],
+                            highlights: [
+                           ],
+                            specifications: [
+                                '<strong>Type:</strong> Resistive voltage divider',
+                                '<strong>Resistors:</strong> Two equal 10kΩ resistors',
+                                '<strong>Division Ratio:</strong> 1:2 (halves the input voltage)',
+                                '<strong>Interface:</strong> ADC input'
+                            ],
+                            connections: [
+                                '<strong>Voltage Divider 1:</strong> PA4',
+                                '<strong>Voltage Divider 2:</strong> PA5'
+                            ],
+                            fullDescription: `The voltage divider reduces higher voltages to a safe range for the ADC by using two equal 10kΩ resistors. This ensures that voltage measurements remain within MCU limits while providing accurate monitoring of system voltages.`
+                        },
+                        // 4.1 Charge-Discharge Module (6-pin)
+                        {
+                            id: 'charge_discharge_module',
+                            title: 'Charge-Discharge Module (6-pin)',
+                            description: 'Module for battery charging and discharging with protection features',
+                            images: ['parts/charging_unit1.jpg'],
+                            highlights: [
+                                { x: 40, y: 54, width: 13, height: 17 }
+                            ],
+                            specifications: [
+                                '<strong>Input Pins:</strong> 2 (connected to DC jack, ~5V or higher)',
+                                '<strong>Battery Pins:</strong> 2 (connected to 3.7V, 200mAh Li-ion battery)',
+                                '<strong>Load Output Pins:</strong> 2 (supply power to external loads)',
+                                '<strong>Protection:</strong> Overcharge, over-discharge, and short-circuit protection'
+                            ],
+                            connections: [
+                                '<strong>Input:</strong> DC Jack (~5V)',
+                                '<strong>Battery:</strong> 3.7V Li-ion',
+                                '<strong>Load:</strong> External circuits via output pins'
+                            ],
+                            fullDescription: `This 6-pin charge-discharge module manages charging and discharging of a 3.7V, 200mAh Li-ion battery. 
+                        It has dedicated input pins for the DC jack, battery pins for charging/discharging, and load pins for powering external circuits. 
+                        Built-in protection circuits prevent overcharge, over-discharge, and short-circuit conditions.`
+                        },
+
+                        // 4.2 DPDT Relay for Battery Charging Control
+                        {
+                            id: 'dpdt_relay',
+                            title: 'DPDT Relay for Battery Charging Control',
+                            description: 'Relay controlled by the Blue Pill MCU for safe battery charging management',
+                            images: ['parts/charging_unit3.jpg'],
+                            highlights: [
+                                { x: 40, y: 72, width: 13, height: 12 }
+                            ],
+                            specifications: [
+                                '<strong>Type:</strong> DPDT relay',
+                                '<strong>Control:</strong> Managed by Blue Pill BMS MCU',
+                                '<strong>Function:</strong> Switches battery charging on/off',
+                                '<strong>Protection:</strong> Disconnects battery under unsafe conditions (voltage/temperature)'
+                            ],
+                            connections: [
+                                '<strong>Relay Control Pin:</strong> PA1'
+                            ],
+                            fullDescription: `The DPDT relay is controlled by the BMS Blue Pill microcontroller to manage battery charging. 
+                        In its normal position, DC power is available to charge the battery. In the switched position, the BMS can disconnect the battery 
+                        from the charger to protect against unsafe conditions such as overvoltage, overheating, or other faults.`
+                        },
+
+                        // 4.3 Control Slide Switch with LED
+                        {
+                            id: 'charge_control_switch',
+                            title: 'Slide Switch for Battery Charging Control',
+                            description: 'Manual control of battery charging with LED indicator',
+                            images: ['parts/charging_unit2.jpg'],
+                            highlights: [
+                                { x: 40, y: 43, width: 13, height: 9 }
+                            ],
+                            specifications: [
+                                '<strong>Type:</strong> Slide switch with LED indicator',
+                                '<strong>Function:</strong> Enables/disables battery charging from DC jack',
+                                '<strong>Purpose:</strong> Prevents overcharging or unintended charging'
+                            ],
+                            connections: [
+                                '<strong>Switch Control:</strong> Inline with DC jack input',
+                                '<strong>LED:</strong> Indicates charging status'
+                            ],
+                            fullDescription: `The slide switch provides manual control over battery charging from the DC jack. 
+                        It includes an LED indicator to display charging status, giving the user direct control to enable or disable charging 
+                        and prevent unnecessary or unsafe charging situations.`
+                        }
+                    ]
+                    },
+                    {
+                        name:"Battery",
+                        sections:[
+                            // 5.1 Battery (3.7V, 2000mAh Li-ion)
+                        {
+                            id: 'battery',
+                            title: 'Battery (3.7V, 2000mAh Li-ion)',
+                            description: 'Primary energy storage unit with controlled charge-discharge cycles',
+                            images: ['parts/battery.jpg'],
+                            highlights: [
+                                { x: 12, y: 45, width: 13, height: 39 }
+                            ],
+                            specifications: [
+                                '<strong>Type:</strong> Li-ion rechargeable battery',
+                                '<strong>Voltage:</strong> 3.7V',
+                                '<strong>Capacity:</strong> 2000mAh',
+                                '<strong>Monitoring:</strong> NTC sensor for temperature feedback',
+                                '<strong>Control:</strong> BMS Blue Pill MCU with DPDT relay'
+                            ],
+                            connections: [
+                                '<strong>NTC Sensor:</strong> PA6 (temperature monitoring)'
+                            ],
+                            fullDescription: `This is the main energy storage unit for the embedded kit. The 3.7V, 2000mAh Li-ion battery 
+                        is monitored by an NTC thermistor to track temperature. The BMS Blue Pill manages charging and discharging cycles 
+                        via a DPDT relay to prevent overcharge, deep discharge, or unsafe thermal conditions.`
+                        },
+
+                        // 5.2 Load Resistors (Discharge Circuit) & Control Mechanisms
+                        {
+                            id: 'load_resistors',
+                            title: 'Load Resistors (Discharge Circuit) & Control Mechanisms',
+                            description: 'Dummy resistors with slide switches for controlled discharge testing',
+                            images: ['parts/loadresistors.jpg'],
+                            highlights: [
+                                { x: 24, y: 45, width: 17, height: 35 }
+                            ],
+                            specifications: [
+                                '<strong>Resistor 1:</strong> 22Ω (2W) → 0.62W dissipation at 3.7V',
+                                '<strong>Resistor 2:</strong> 47Ω (2W) → 0.29W dissipation at 3.7V',
+                                '<strong>Resistor 3:</strong> 56Ω (2W) → 0.24W dissipation at 3.7V',
+                                '<strong>Safe Limits:</strong> All below 2W rating',
+                                '<strong>Control:</strong> Individual slide switches with LED indicators'
+                            ],
+                            connections: [
+                                '<strong>Switches:</strong> Inline with each resistor load',
+                                '<strong>LED Indicators:</strong> Show active load status'
+                            ],
+                            fullDescription: `The discharge circuit uses three resistors (22Ω, 47Ω, and 56Ω) as dummy loads to test 
+                        battery performance. Each resistor can be enabled or disabled individually through a slide switch, with 
+                        an LED indicator showing the active load. This setup allows controlled testing of discharge rates while 
+                        remaining within safe power limits.`
+                        },
+
+                        // 5.3 Temperature Monitoring (NTC Sensor)
+                        {
+                            id: 'ntc_sensor',
+                            title: 'Temperature Monitoring (NTC Sensor)',
+                            description: 'NTC thermistor-based battery temperature monitoring system',
+                            images: ['parts/ntcsensor.jpg'],
+                            highlights: [
+                                {x: 24, y: 75, width: 17, height: 10 }
+                            ],
+                            specifications: [
+                                '<strong>Type:</strong> NTC thermistor',
+                                '<strong>Placement:</strong> Attached to battery surface',
+                                '<strong>Interface:</strong> ADC input',
+                                '<strong>Safety Feature:</strong> Cuts off charging/discharging above 50°C'
+                            ],
+                            connections: [
+                                '<strong>NTC:</strong> PA6 (ADC input)'
+                            ],
+                            fullDescription: `The NTC thermistor monitors the battery temperature by changing resistance as heat increases. 
+                        The Blue Pill reads this data via ADC. If the battery temperature exceeds a threshold (e.g., 50°C), 
+                        charging or discharging is cut off automatically to prevent damage and ensure safety.`
+                        }
+
+                        ]
+                    }
                 ],
 
                 init() {
