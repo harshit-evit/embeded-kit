@@ -521,8 +521,8 @@
         <div class="logo">ETM32</div>
         <nav>
             <ul>
-                <li><a href="#contact" @click="scrollToSection('contact')">Contact</a></li>
-                <li><a href="mailto:support@embeddedkit.com">Email Support</a></li>
+                <li><a target="_blank"  href="https://docs.google.com/forms/d/e/1FAIpQLSeGwbvMGdWSIaS9GbI5KM_dFkX-i74BBe60wuqDS6Mgz6BHxw/viewform" @click="scrollToSection('contact')">Query Us</a></li>
+                <!-- <li><a href="mailto:support@embeddedkit.com">Email Support</a></li> -->
                 <li><a href="#resources" @click="scrollToSection('overview')">Features</a></li>
             </ul>
         </nav>
@@ -605,7 +605,7 @@
         </div>
     </section>
 
-    <section class="contact" id="contact">
+    <!-- <section class="contact" id="contact">
         <h2 class="section-title">Connect With Us</h2>
         <form @submit.prevent="submitForm">
             <input type="text" placeholder="Your Name" required x-model="form.name">
@@ -613,7 +613,7 @@
             <textarea placeholder="Tell us about your project..." rows="5" required x-model="form.message"></textarea>
             <button type="submit">Send Message</button>
         </form>
-    </section>
+    </section> -->
 
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script>
