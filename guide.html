@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started with STM32CubeIDE - Embedded Kit User Manual</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .breadcrumb {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.8;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8efff 100%);
+            padding: 2rem;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .toc h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .toc-item {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .toc-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .toc-item.active {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .section-number {
+            background: #667eea;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Step Cards */
+        .steps-grid {
+            display: grid;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .step-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8efff 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .step-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .step-title {
+            font-size: 1.4rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .step-content {
+            margin-left: 3.5rem;
+        }
+
+        .step-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .step-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #555;
+        }
+
+        .step-list li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-size: 0.8rem;
+        }
+
+        /* Special Elements */
+        .info-box {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .warning-box {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .warning-box-title {
+            font-weight: 600;
+            color: #e68900;
+            margin-bottom: 0.5rem;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            color: #333;
+        }
+
+        .download-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .download-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Progress Indicator */
+        .progress-bar {
+            background: rgba(102, 126, 234, 0.1);
+            height: 4px;
+            border-radius: 2px;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Quick Links */
+        .quick-links {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            margin: -3rem -3rem 0;
+            text-align: center;
+        }
+
+        .quick-links h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .quick-link {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .quick-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .main-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .toc {
+                padding: 1.5rem;
+            }
+
+            .toc-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .step-content {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+
+            .step-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .step-number {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        .completion-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background: #28a745;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .step-card.completed .completion-indicator {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .step-card.completed {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-color: #28a745;
+        }
+    </style>
+</head>
+<body x-data="gettingStartedGuide()">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="breadcrumb">
+                <a href="#" @click="goHome()">Home</a> / <span>Getting Started Guide</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Getting Started with STM32CubeIDE</h1>
+        <p class="hero-subtitle">Complete Setup Guide for Blue Pill Development</p>
+        <p class="hero-description">
+            STM32CubeIDE is an integrated development environment (IDE) for STM32 microcontrollers, 
+            combining code editing, compilation, debugging, and peripheral configuration in one tool. 
+            This section provides step-by-step instructions for development with the Blue Pill (STM32F103C8T6).
+        </p>
+    </section>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="content-card">
+            <!-- Table of Contents -->
+            <div class="toc">
+                <h2>📋 Table of Contents</h2>
+                <div class="toc-grid">
+                    <div class="toc-item" 
+                         :class="{ 'active': activeSection === 'installation' }"
+                         @click="showSection('installation')">
+                        <strong>7.1</strong> Installing STM32CubeIDE
+                    </div>
+                    <div class="toc-item" 
+                         :class="{ 'active': activeSection === 'newproject' }"
+                         @click="showSection('newproject')">
+                        <strong>7.2</strong> Setting Up New Project
+                    </div>
+                    <div class="toc-item" 
+                         :class="{ 'active': activeSection === 'peripherals' }"
+                         @click="showSection('peripherals')">
+                        <strong>7.3</strong> Configuring Peripherals
+                    </div>
+                    <div class="toc-item" 
+                         :class="{ 'active': activeSection === 'compile' }"
+                         @click="showSection('compile')">
+                        <strong>7.4</strong> Compiling & Flashing
+                    </div>
+                    <div class="toc-item" 
+                         :class="{ 'active': activeSection === 'debugging' }"
+                         @click="showSection('debugging')">
+                        <strong>7.5</strong> Debugging
+                    </div>
+                    <div class="toc-item" 
+                         :class="{ 'active': activeSection === 'resources' }"
+                         @click="showSection('resources')">
+                        <strong>7.6</strong> Additional Resources
+                    </div>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="progress-fill" :style="`width: ${progress}%`"></div>
+                </div>
+                <p style="text-align: center; margin-top: 0.5rem; color: #666;">
+                    Progress: <span x-text="completedSteps"></span>/6 sections completed
+                </p>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Section 7.1: Installation -->
+                <div class="section" :class="{ 'active': activeSection === 'installation' }">
+                    <div class="section-header">
+                        <div class="section-number">Section 7.1</div>
+                        <h2 class="section-title">Installing STM32CubeIDE</h2>
+                        <p class="section-description">Download and install the official STM32 development environment</p>
+                    </div>
+
+                    <div class="steps-grid">
+                        <div class="step-card" :class="{ 'completed': completedTasks.install_download }">
+                            <div class="completion-indicator">✓</div>
+                            <div class="step-header">
+                                <div class="step-number">1</div>
+                                <div class="step-title">💻 Download STM32CubeIDE</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Visit the official STMicroelectronics website and download the appropriate version:</p>
+                                <div class="info-box">
+                                    <div class="info-box-title">🔗 Download Link</div>
+                                    <p>https://www.st.com/en/development-tools/stm32cubeide.html</p>
+                                </div>
+                                <ul class="step-list">
+                                    <li>Select the correct version for your OS (Windows/Linux/macOS)</li>
+                                    <li>Sign in or create an ST account to download</li>
+                                    <li>Choose the latest stable version</li>
+                                </ul>
+                                <button class="download-link" @click="markCompleted('install_download')">
+                                    Mark as Complete
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="step-card" :class="{ 'completed': completedTasks.install_setup }">
+                            <div class="completion-indicator">✓</div>
+                            <div class="step-header">
+                                <div class="step-number">2</div>
+                                <div class="step-title">⚙️ Install STM32CubeIDE</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Run the downloaded installer and complete the installation process:</p>
+                                <ul class="step-list">
+                                    <li>Run the installer with administrator privileges</li>
+                                    <li>Follow the on-screen installation wizard</li>
+                                    <li>Choose default settings unless specific modifications needed</li>
+                                    <li>Allow firewall exceptions if prompted</li>
+                                </ul>
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Important Note</div>
+                                    <p>Installation may take 10-15 minutes depending on your system. Ensure you have at least 2GB of free disk space.</p>
+                                </div>
+                                <button class="download-link" @click="markCompleted('install_setup')">
+                                    Mark as Complete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 7.2: New Project -->
+                <div class="section" :class="{ 'active': activeSection === 'newproject' }">
+                    <div class="section-header">
+                        <div class="section-number">Section 7.2</div>
+                        <h2 class="section-title">Setting Up a New Project</h2>
+                        <p class="section-description">Create and configure your first STM32 project for the Blue Pill</p>
+                    </div>
+
+                    <div class="steps-grid">
+                        <div class="step-card" :class="{ 'completed': completedTasks.project_launch }">
+                            <div class="completion-indicator">✓</div>
+                            <div class="step-header">
+                                <div class="step-number">1</div>
+                                <div class="step-title">🚀 Launch STM32CubeIDE</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Open the installed STM32CubeIDE application from your system:</p>
+                                <ul class="step-list">
+                                    <li>Launch STM32CubeIDE from Start Menu or Applications</li>
+                                    <li>Select or create a workspace directory</li>
+                                    <li>Wait for the IDE to fully load</li>
+                                </ul>
+                                <button class="download-link" @click="markCompleted('project_launch')">
+                                    Mark as Complete
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="step-card" :class="{ 'completed': completedTasks.project_create }">
+                            <div class="completion-indicator">✓</div>
+                            <div class="step-header">
+                                <div class="step-number">2</div>
+                                <div class="step-title">📁 Create New Project</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Create a new STM32 project for the Blue Pill microcontroller:</p>
+                                <ul class="step-list">
+                                    <li>Click <strong>File → New → STM32 Project</strong></li>
+                                    <li>In MCU/Board Selector, search for <code>STM32F103C8T6</code></li>
+                                    <li>Select the microcontroller from the list</li>
+                                    <li>Click <strong>Next</strong> to proceed</li>
+                                </ul>
+                                <div class="info-box">
+                                    <div class="info-box-title">💡 Tip</div>
+                                    <p>You can also search for "Blue Pill" in the board selector for quick access.</p>
+                                </div>
+                                <button class="download-link" @click="markCompleted('project_create')">
+                                    Mark as Complete
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="step-card" :class="{ 'completed': completedTasks.project_config }">
+                            <div class="completion-indicator">✓</div>
+                            <div class="step-header">
+                                <div class="step-number">3</div>
+                                <div class="step-title">⚙️ Configure Project Settings</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Set up your project configuration and generate the initial code:</p>
+                                <ul class="step-list">
+                                    <li>Enter a meaningful <strong>Project Name</strong></li>
+                                    <li>Select <strong>C</strong> as the programming language</li>
+                                    <li>Choose project location (or use default)</li>
+                                    <li>Click <strong>Finish</strong> to generate the project</li>
+                                </ul>
+                                <div class="code-block">
+Project Name: MySTM32Project
+Language: C
+Toolchain: STM32CubeIDE
+                                </div>
+                                <button class="download-link" @click="markCompleted('project_config')">
+                                    Mark as Complete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 7.3: Peripherals -->
+                <div class="section" :class="{ 'active': activeSection === 'peripherals' }">
+                    <div class="section-header">
+                        <div class="section-number">Section 7.3</div>
+                        <h2 class="section-title">Configuring Peripherals in STM32CubeMX</h2>
+                        <p class="section-description">Set up GPIO, UART, I2C, SPI, and other peripheral interfaces</p>
+                    </div>
+
+                    <div class="steps-grid">
+                        <div class="step-card" :class="{ 'completed': completedTasks.periph_enable }">
+                            <div class="completion-indicator">✓</div>
+                            <div class="step-header">
+                                <div class="step-number">1</div>
+                                <div class="step-title">🔧 Enable Peripherals</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Configure the required peripherals in the CubeMX interface:</p>
+                                <ul class="step-list">
+                                    <li>Navigate to <strong>Pinout & Configuration</strong> tab</li>
+                                    <li>Enable GPIO pins for LEDs and buttons</li>
+                                    <li>Configure UART for serial communication</li>
+                                    <li>Set up I2C for sensor interfaces</li>
+                                    <li>Enable SPI if needed</li>
+                                    <li>Configure ADC for analog readings</li>
+                                </ul>
+                                <div class="info-box">
+                                    <div class="info-box-title">🎯 Common Configurations</div>
+                                    <p>PA5: GPIO Output (LED), PC13: GPIO Input (Button), PA9/PA10: USART1</p>
+                                </div>
+                                <button class="download-link" @click="markCompleted('periph_enable')">
+                                    Mark as Complete
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="step-card" :class="{ 'completed': completedTasks.periph_generate }">
+                            <div class="completion-indicator">✓</div>
+                            <div class="step-header">
+                                <div class="step-number">2</div>
+                                <div class="step-title">⚡ Generate Code</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Generate the initialization code for your configured peripherals:</p>
+                                <ul class="step-list">
+                                    <li>Click the <strong>"Generate Code"</strong> button (gear icon)</li>
+                                    <li>Wait for code generation to complete</li>
+                                    <li>Review the generated files in Project Explorer</li>
+                                    <li>Check main.c for initialization functions</li>
+                                </ul>
+                                <div class="code-block">
+/* Generated initialization code will appear in main.c */
+int main(void) {
+    HAL_Init();
+    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_USART1_UART_Init();
+    // Your code here
+}
+                                </div>
+                                <button class="download-link" @click="markCompleted('periph_generate')">
+                                    Mark as Complete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 7.4: Compile & Flash -->
+                <div class="section" :class="{ 'active': activeSection === 'compile' }">
+                    <div class="section-header">
+                        <div class="section-number">Section 7.4</div>
+                        <h2 class="section-title">Compiling and Flashing Code</h2>
+                        <p class="section-description">Build your project and upload it to the Blue Pill microcontroller</p>
+                    </div>
+
+                    <div class="steps-grid">
+                        <div class="step-card" :class="{ 'completed': completedTasks.code_write }">
+                            <div class="completion-indicator">✓</div>
+                            <div class="step-header">
+                                <div class="step-number">1</div>
+                                <div class="step-title">✏️ Write Your Code</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Add your custom application logic to the main.c file:</p>
+                                <ul class="step-list">
+                                    <li>Open <strong>main.c</strong> in the code editor</li>
+                                    <li>Add your code inside the <code>while(1)</code> loop</li>
+                                    <li>Use HAL library functions for peripheral control</li>
+                                </ul>
+                                <div class="code-block">
+/* USER CODE BEGIN 3 */
+while (1) {
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+    HAL_Delay(1000);
+}
+/* USER CODE END 3 */
+                                </div>
+                                <button class="download-link" @click="markCompleted('code_write')">
+                                    Mark as Complete
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="step-card" :class="{ 'completed': completedTasks.code_compile }">
+                            <div class="completion-indicator">✓</div>
+                            <div class="step-header">
+                                <div class="step-number">2</div>
+                                <div class="step-title">🔨 Compile the Project</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Build your project to check for errors and generate the binary:</p>
+                                <ul class="step-list">
+                                    <li>Click <strong>Project → Build Project</strong> or press <kbd>Ctrl + B</kbd></li>
+                                    <li>Monitor the Console tab for compilation messages</li>
+                                    <li>Ensure no errors appear in the build output</li>
+                                    <li>Check that binary files are generated</li>
+                                </ul>
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Troubleshooting</div>
+                                    <p>If compilation fails, check for syntax errors, missing includes, or incorrect pin configurations.</p>
+                                </div>
+                                <button class="download-link" @click="markCompleted('code_compile')">
+                                    Mark as Complete
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="step-card" :class="{ 'completed': completedTasks.code_flash }">
+                            <div class="completion-indicator">✓</div>
+                            <div class="step-header">
+                                <div class="step-number">3</div>
+                                <div class="step-title">📡 Flash Code to Blue Pill</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Upload your compiled program to the STM32F103C8T6 microcontroller:</p>
+                                <ul class="step-list">
+                                    <li>Connect the ST-Link/V2 programmer to the Blue Pill</li>
+                                    <li>Ensure proper wiring: 3.3V, GND, SWDIO, SWCLK</li>
+                                    <li>Click <strong>Run → Run Configurations</strong></li>
+                                    <li>Select <strong>ST-Link Debugging</strong> and click <strong>Run</strong></li>
+                                </ul>
+                                <div class="info-box">
+                                    <div class="info-box-title">🔌 Wiring Reference</div>
+                                    <p>ST-Link: 3.3V→3.3V, GND→GND, SWDIO→DIO, SWCLK→CLK</p>
+                                </div>
+                                <button class="download-link" @click="markCompleted('code_flash')">
+                                    Mark as Complete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 7.5: Debugging -->
+                <div class="section" :class="{ 'active': activeSection === 'debugging' }">
+                    <div class="section-header">
+                        <div class="section-number">Section 7.5</div>
+                        <h2 class="section-title">Debugging in STM32CubeIDE</h2>
+                        <p class="section-description">Use powerful debugging tools to troubleshoot and optimize your code</p>
+                    </div>
+
+                    <div class="steps-grid">
+                        <div class="step-card" :class="{ 'completed': completedTasks.debug_enable }">
+                            <div class="completion-indicator">✓</div>
+                            <div class="step-header">
+                                <div class="step-number">1</div>
+                                <div class="step-title">🐛 Enable Debugging Mode</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Configure the debugger for your Blue Pill project:</p>
+                                <ul class="step-list">
+                                    <li>Click <strong>Run → Debug Configurations</strong></li>
+                                    <li>Select appropriate debugger (ST-Link GDB Server)</li>
+                                    <li>Verify connection settings</li>
+                                    <li>Click <strong>Debug</strong> to start debugging session</li>
+                                </ul>
+                                <button class="download-link" @click="markCompleted('debug_enable')">
+                                    Mark as Complete
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="step-card" :class="{ 'completed': completedTasks.debug_tools }">
+                            <div class="completion-indicator">✓</div>
+                            <div class="step-header">
+                                <div class="step-number">2</div>
+                                <div class="step-title">🔍 Use Debugging Tools</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Utilize breakpoints and variable monitoring for effective debugging:</p>
+                                <ul class="step-list">
+                                    <li>Set breakpoints by clicking in the left margin of code editor</li>
+                                    <li>Use <strong>Variables</strong> tab to monitor real-time values</li>
+                                    <li>Check <strong>Registers</strong> tab for peripheral registers</li>
+                                    <li>Use step-through debugging (F5/F6) to trace execution</li>
+                                </ul>
+                                <div class="info-box">
+                                    <div class="info-box-title">🎯 Debug Features</div>
+                                    <p>Live expressions, memory browser, and real-time variable modification available.</p>
+                                </div>
+                                <button class="download-link" @click="markCompleted('debug_tools')">
+                                    Mark as Complete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 7.6: Resources -->
+                <div class="section" :class="{ 'active': activeSection === 'resources' }">
+                    <div class="section-header">
+                        <div class="section-number">Section 7.6</div>
+                        <h2 class="section-title">Additional Resources</h2>
+                        <p class="section-description">Essential links and documentation for continued learning</p>
+                    </div>
+
+                    <div class="quick-links">
+                        <h3>🔗 Essential Resources</h3>
+                        <div class="links-grid">
+                            <div class="quick-link" @click="openResource('user_guide')">
+                                <strong>📖 STM32CubeIDE User Guide</strong>
+                                <p>Official documentation and tutorials</p>
+                            </div>
+                            <div class="quick-link" @click="openResource('hal_docs')">
+                                <strong>📚 HAL Library Documentation</strong>
+                                <p>Complete API reference for STM32 HAL</p>
+                            </div>
+                            <div class="quick-link" @click="openResource('community')">
+                                <strong>👥 Community Forums</strong>
+                                <p>STM32 developer community support</p>
+                            </div>
+                            <div class="quick-link" @click="openResource('examples')">
+                                <strong>💡 Code Examples</strong>
+                                <p>Ready-to-use project templates</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="padding: 2rem 0;">
+                        <div class="info-box">
+                            <div class="info-box-title">🎉 Congratulations!</div>
+                            <p>You've completed the STM32CubeIDE setup process. Your development environment is now ready for embedded programming with the Blue Pill microcontroller. Start with simple LED blinking projects and gradually move to more complex applications.</p>
+                        </div>
+
+                        <div class="warning-box">
+                            <div class="warning-box-title">⚠️ Safety Reminder</div>
+                            <p>Always double-check wiring connections before powering on your circuit. Incorrect connections can damage the microcontroller or connected components.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function gettingStartedGuide() {
+            return {
+                activeSection: 'installation',
+                completedTasks: {
+                    install_download: false,
+                    install_setup: false,
+                    project_launch: false,
+                    project_create: false,
+                    project_config: false,
+                    periph_enable: false,
+                    periph_generate: false,
+                    code_write: false,
+                    code_compile: false,
+                    code_flash: false,
+                    debug_enable: false,
+                    debug_tools: false
+                },
+
+                init() {
+                    this.showSection('installation');
+                },
+
+                get completedSteps() {
+                    const sections = {
+                        'installation': ['install_download', 'install_setup'],
+                        'newproject': ['project_launch', 'project_create', 'project_config'],
+                        'peripherals': ['periph_enable', 'periph_generate'],
+                        'compile': ['code_write', 'code_compile', 'code_flash'],
+                        'debugging': ['debug_enable', 'debug_tools'],
+                        'resources': []
+                    };
+
+                    let completed = 0;
+                    Object.keys(sections).forEach(section => {
+                        if (sections[section].length === 0 || sections[section].every(task => this.completedTasks[task])) {
+                            completed++;
+                        }
+                    });
+
+                    return completed;
+                },
+
+                get progress() {
+                    return (this.completedSteps / 6) * 100;
+                },
+
+                showSection(section) {
+                    this.activeSection = section;
+                    
+                    // Smooth scroll to main content
+                    document.querySelector('.main-content').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                },
+
+                markCompleted(task) {
+                    this.completedTasks[task] = !this.completedTasks[task];
+                },
+
+                openResource(resource) {
+                    const resources = {
+                        'user_guide': 'https://www.st.com/resource/en/user_manual/um2609-stm32cubeide-user-guide-stmicroelectronics.pdf',
+                        'hal_docs': 'https://www.st.com/resource/en/user_manual/dm00105879-description-of-stm32f1-hal-and-ll-drivers-stmicroelectronics.pdf',
+                        'community': 'https://community.st.com/s/topic/0TO0X000000BSqSWAW/stm32-mcus',
+                        'examples': 'https://github.com/STMicroelectronics/STM32CubeF1'
+                    };
+                    
+                    if (resources[resource]) {
+                        window.open(resources[resource], '_blank');
+                    }
+                },
+
+                goHome() {
+                    // This would typically navigate back to the main kit page
+                    window.location.href='index.html'
+                }
+            }
+        }
+    </script>
+</body>
+</html>
